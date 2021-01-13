@@ -1,0 +1,20 @@
+# Table of contents for /data/subject_table folder
+
+Folder contains files downloaded from US Census @ https://data.census.gov/cedsci/
+
+All files are from the 2019 ACS 5-year survey and are subject tables:
+
+S0101 : Age and Sex
+S0601 : Selected Characteristics of the Total and Native Populations of the US
+S0801 : Commuting Characterisics by Sex
+S0802 : Means of Transportation to Work by Selected Characteristics
+S1101 : Households and Families
+S1201 : Marital Status
+S1501 : Educational Attainment
+S1601 : Language Spoken at Home
+S1903 : Median Income for Last 12 Months (2019 inflation adjusted)
+S2403 : Industry by Sex for Civilian Employed Population (16+ years old)
+S2501 : Occupancy Characteristics
+S2502 : Demographic Characteristics for Occupied Housing Units
+S2801 : Types of Computers and Internet Subscriptions
+
