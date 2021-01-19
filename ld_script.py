@@ -70,3 +70,14 @@ def unzip_many_files(zipped_path, unzipped_path, create_new=False):
         else:
             with zipfile.ZipFile(archive_path) as zf:
                 zf.extractall(st_unzipped_path)
+
+def parse_geo_id(df):
+    '''
+    Function that takes the GEO_ID column of census data and parses the value to create
+    4 new columns containing components of State FIPS codes.
+    '''
+    df['FIPS'] = df.GEO_ID.apply(lambda x: x.split('US')[1] if len(x) > 3 else 'fips')
+    df["STATEFP"] = df.GEO_ID.apply(lambda x: x.split('US')[1][:2] if len(x) > 3 else 'statefp')
+    df["COUNTYFP"] = df.GEO_ID.apply(lambda x: x.split('US')[1][2:5] if len(x) > 3 else 'countyfp')
+    df["TRACTCE"] = df.GEO_ID.apply(lambda x: x.split('US')[1][5:] if len(x) > 3 else 'tractce')
+    return df    
