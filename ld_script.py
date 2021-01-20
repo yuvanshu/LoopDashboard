@@ -81,3 +81,52 @@ def parse_geo_id(df):
     df["COUNTYFP"] = df.GEO_ID.apply(lambda x: x.split('US')[1][2:5] if len(x) > 3 else 'countyfp')
     df["TRACTCE"] = df.GEO_ID.apply(lambda x: x.split('US')[1][5:] if len(x) > 3 else 'tractce')
     return df    
+
+def merge_columns_by_add(df, target, columns, column_dict):
+    '''
+    Function that merges multiple columns into one by addition. Specify an
+    existing target column to collapse on. Function will attempt to rename
+    the target column to reflect the merge where possible.
+    
+    Parameters:
+        df: dataframe with columns to merge
+        target: column name of target column for the merge
+        columns: list of column(s) that are to be merged via addition
+        column_dict: dictionary of str summaries for each column name
+        
+    Returns:
+        df: Modified dataframe object 
+    '''
+    
+    #Steps to update our column metadata dictionary
+    str1 = column_dict[target]
+    str2 = column_dict[columns[-1]] # Assumes nice sequential ordering of list
+    str1_replace = str(max([int(s) for s in str1.split() if s.isdigit()]))
+    str2_replace = str(max([int(s) for s in str2.split() if s.isdigit()])) 
+    
+    df = df.copy()
+    highest_index = int(target[-3:-1]) #Assumes that these chars are ints
+    target_ser = df[target].copy()
+    
+    try:
+        columns.pop(columns.index(target))
+    except: 
+        ValueError
+    
+    for i in columns:
+        
+        if int(i[-3:-1]) > highest_index:
+            
+            highest_index = int(i[-3:-1])
+        target_ser += df[i]
+        
+    df[target] = target_ser
+    new_col_name = target[:-1] + '_' + str(highest_index) + 'E'
+    column_dict[new_col_name] = str1.replace(str1_replace, str2_replace)
+    column_dict.pop(target)
+    for i in columns:
+        column_dict.pop(i)
+    df.drop(columns=columns, inplace=True)
+    df.rename(columns={target:new_col_name}, inplace=True)
+    return df, column_dict   
+

@@ -1,0 +1,14 @@
+,0
+COUNTYFP,countyfp
+FIPS,fips
+S0101_C01_001E,Estimate Total Total population
+S0101_C01_007_8E,Estimate Total 25 to 34 years
+S0101_C01_009_11E,Estimate Total 35 to 49 years
+S0101_C01_012_14E,Estimate Total 50 to 64 years
+S0101_C01_021E,Estimate Total 15 to 17 years
+S0101_C01_023E,Estimate Total 18 to 24 years
+S0101_C01_030E,Estimate Total 65 years and over
+S0101_C03_001E,Estimate Male Total population
+S0101_C05_001E,Estimate Female Total population
+STATEFP,statefp
+TRACTCE,tractce
