@@ -76,10 +76,10 @@ def parse_geo_id(df):
     Function that takes the GEO_ID column of census data and parses the value to create
     4 new columns containing components of State FIPS codes.
     '''
-    df['FIPS'] = df.GEO_ID.apply(lambda x: x.split('US')[1] if len(x) > 3 else 'fips')
-    df["STATEFP"] = df.GEO_ID.apply(lambda x: x.split('US')[1][:2] if len(x) > 3 else 'statefp')
-    df["COUNTYFP"] = df.GEO_ID.apply(lambda x: x.split('US')[1][2:5] if len(x) > 3 else 'countyfp')
-    df["TRACTCE"] = df.GEO_ID.apply(lambda x: x.split('US')[1][5:] if len(x) > 3 else 'tractce')
+    df['FIPS'] = df.GEO_ID.apply(lambda x: x.split('US')[1] if len(x) > 3 else '_fips')
+    df["STATEFP"] = df.GEO_ID.apply(lambda x: x.split('US')[1][:2] if len(x) > 3 else '_statefp')
+    df["COUNTYFP"] = df.GEO_ID.apply(lambda x: x.split('US')[1][2:5] if len(x) > 3 else '_countyfp')
+    df["TRACTCE"] = df.GEO_ID.apply(lambda x: x.split('US')[1][5:] if len(x) > 3 else '_tractce')
     return df    
 
 def merge_columns_by_add(df, target, columns, column_dict):
@@ -128,5 +128,18 @@ def merge_columns_by_add(df, target, columns, column_dict):
         column_dict.pop(i)
     df.drop(columns=columns, inplace=True)
     df.rename(columns={target:new_col_name}, inplace=True)
-    return df, column_dict   
+    return df, column_dict 
 
+def drop_and_normalize(df1, df2):
+    df1.drop(columns=['GEO_ID', 'NAME'], inplace=True)
+    df2.drop(index=0, axis=0, inplace=True)
+    df2.reset_index(drop=True, inplace=True)
+    # Subtracting 3 to S0101_data.shape[1] to account for the our creation of 3 new columns
+    assert (df1.shape[1]-4 == df2.shape[0]), print('mismatch in metadata and data correspondence')
+    return df1, df2
+
+def create_wanted_columns(df1, df2, i_list):
+    wc = df2.GEO_ID.iloc[i_list].to_list()
+    ac = list(df1.columns[-4:])
+    wc.extend(ac)
+    return wc
